@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
-import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import toast, { Toaster } from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
-import app from '../firebase';
+ import { useNavigate } from 'react-router-dom';
+import app from '../firebase'
+
 
 const PhoneNumberVerification = () => {
+  
   const navigate = useNavigate();
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  const auth  = getAuth(app);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -22,54 +22,34 @@ const PhoneNumberVerification = () => {
       return;
     }
 
-    try {
-      // Check if the phone number exists in Firestore
-      const q = query(collection(db, 'users'), where('number', '==', phoneNumber));
-      const querySnapshot = await getDocs(q);
+   
+    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      
+     
+      size: 'invisible',
+      callback: () => {
+        console.log('reCAPTCHA verification successful');
+        
+            }
+      
 
-      if (querySnapshot.empty) {
-        toast.error('This phone number is not registered');
-        return;
-      }
+      
+    }, auth);
 
-      const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-        size: 'invisible',
-        callback: () => {
-          console.log('reCAPTCHA verification successful');
-        }
-      }, auth);
 
-      // Show loading toast
-      const promise = new Promise((resolve, reject) => {
-        toast.promise(
-          signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier),
-          {
-            loading: 'Sending OTP...',
-            success: 'OTP sent to your phone number',
-            error: 'Error sending OTP'
-          }
-        ).then((result) => {
-          setConfirmationResult(result);
-          resolve(result);
-        }).catch((error) => {
-          reject(error);
-        });
+    signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
+      .then((result) => {
+        setConfirmationResult(result);
+        toast.success('OTP sent to your phone number');
+      })
+      .catch((error) => {
+        console.error('Error sending OTP:', error);
+        toast.error('Error sending OTP');
       });
 
-      // Handle promise
-      promise.then((result) => {
-        console.log('signInWithPhoneNumber result:', result);
-      }).catch((error) => {
-        console.error('signInWithPhoneNumber error:', error);
-      });
-
-      recaptchaVerifier.render().then((widgetId) => {
-        window.recaptchaWidgetId = widgetId;
-      });
-    } catch (error) {
-      console.error('Error in handleSendOtp:', error);
-      toast.error('Error sending OTP');
-    }
+    recaptchaVerifier.render().then((widgetId) => {
+      window.recaptchaWidgetId = widgetId;
+    });
   };
 
   const handleVerifyOtp = async (e) => {
@@ -103,7 +83,7 @@ const PhoneNumberVerification = () => {
 
   return (
     <>
-      <Toaster />
+      <Toaster/>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
           <h1 className="mb-6 text-2xl font-bold text-center text-gray-700">Phone Number Verification</h1>
@@ -120,7 +100,18 @@ const PhoneNumberVerification = () => {
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
               />
             </div>
-           
+            <div className="form-group">
+              <label htmlFor="username" className="block text-sm font-medium text-gray-600">Username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
+              />
+            </div>
             <div id="recaptcha-container"></div>
             <button type="submit" className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Send OTP</button>
           </form>
