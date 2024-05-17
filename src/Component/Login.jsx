@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { auth } from '../firebase';
+import app from '../firebase';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
+    const auth = getAuth(app);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -71,6 +72,12 @@ const Login = () => {
                         No account yet?{' '}
                         <NavLink to="/signup" className="text-blue-500 hover:underline">
                             Sign up
+                        </NavLink>
+                    </p>
+                    <p className="text-sm text-gray-700 mt-2">
+                        Or{' '}
+                        <NavLink to="/phone_login" className="text-blue-500 hover:underline">
+                            Login With Phone Number
                         </NavLink>
                     </p>
                 </section>

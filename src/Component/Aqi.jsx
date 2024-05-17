@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import logo from '../Images/tree.svg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { getAuth, signOut } from "firebase/auth";
+import app from "../firebase";
 import { useNavigate } from 'react-router-dom';
 
-const Api = () => {
+const Aqi = ( ) => {
+
+ 
+  const auth = getAuth(app);
   const navigate = useNavigate();
 
   const [lat, setLat] = useState('');
@@ -138,6 +141,7 @@ const Api = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-blue-800 p-4">
+       
       <ToastContainer />
       <h1 className="text-4xl font-bold mb-6 text-white">Air Pollution Indicator</h1>
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -196,7 +200,6 @@ const Api = () => {
         <span className="text-white text-lg">Plant more</span>
         <img src={logo} alt="logo" className="ml-2 w-9 h-9" />
       </footer>
-
       <button
         className="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
         onClick={handleLogout}
@@ -207,4 +210,4 @@ const Api = () => {
   );
 };
 
-export default Api;
+export default Aqi;
