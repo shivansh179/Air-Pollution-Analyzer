@@ -29,7 +29,7 @@ const PhoneNumberVerification = () => {
       size: 'invisible',
       callback: () => {
         console.log('reCAPTCHA verification successful');
-        
+
             }
       
 
