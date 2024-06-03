@@ -143,7 +143,7 @@ const Aqi = ( ) => {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-blue-800 p-4">
        
       <ToastContainer />
-      <h1 className="text-4xl font-bold mb-6 text-white">Air Pollution Indicator</h1>
+      <h1 className="text-4xl font-bold mb-6 text-white">Air Pollution Analyzer</h1>
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Your Location:</h2>
         <div className="flex flex-col mb-4">
