@@ -35,7 +35,7 @@ const Login = () => {
             <main className="flex flex-col items-center justify-center w-screen h-screen bg-amber-600">
                 <ToastContainer />
                 <section className="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-lg">
-                    <h1 className="text-4xl font-bold mb-6">FocusApp</h1>
+                    <h1 className="text-4xl font-bold mb-6">Air Pollution Analyzer</h1>
                     <form className="flex flex-col w-64 space-y-4" onSubmit={onLogin}>
                         <div className="flex flex-col">
                             <label htmlFor="email-address" className="font-bold text-xl">Email address</label>

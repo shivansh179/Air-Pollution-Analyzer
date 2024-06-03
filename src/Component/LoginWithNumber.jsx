@@ -1,18 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
 import toast, { Toaster } from 'react-hot-toast';
- import { useNavigate } from 'react-router-dom';
-import app from '../firebase'
-
+import { useNavigate } from 'react-router-dom';
+import app from '../firebase';
 
 const PhoneNumberVerification = () => {
-  
   const navigate = useNavigate();
-  const auth  = getAuth(app);
+  const auth = getAuth(app);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [username, setUsername] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
+
+  useEffect(() => {
+    // Ensure reCAPTCHA verifier is set up only once
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible',
+        callback: (response) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          console.log('reCAPTCHA verification successful:', response);
+        }
+      }, auth);
+    }
+    return () => {
+      if (window.recaptchaVerifier) {
+        window.recaptchaVerifier.clear();
+      }
+    };
+  }, [auth]);
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
@@ -22,22 +38,9 @@ const PhoneNumberVerification = () => {
       return;
     }
 
-   
-    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      
-     
-      size: 'invisible',
-      callback: () => {
-        console.log('reCAPTCHA verification successful');
+    const appVerifier = window.recaptchaVerifier;
 
-            }
-      
-
-      
-    }, auth);
-
-
-    signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier)
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
       .then((result) => {
         setConfirmationResult(result);
         toast.success('OTP sent to your phone number');
@@ -47,7 +50,7 @@ const PhoneNumberVerification = () => {
         toast.error('Error sending OTP');
       });
 
-    recaptchaVerifier.render().then((widgetId) => {
+    appVerifier.render().then((widgetId) => {
       window.recaptchaWidgetId = widgetId;
     });
   };
@@ -73,17 +76,9 @@ const PhoneNumberVerification = () => {
       });
   };
 
-  useEffect(() => {
-    return () => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-      }
-    };
-  }, []);
-
   return (
     <>
-      <Toaster/>
+      <Toaster />
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
           <h1 className="mb-6 text-2xl font-bold text-center text-gray-700">Phone Number Verification</h1>

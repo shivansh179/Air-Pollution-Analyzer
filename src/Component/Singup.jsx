@@ -43,7 +43,7 @@ const Signup = () => {
     return (
         <main className="flex flex-col items-center justify-center w-screen h-screen bg-amber-600">
             <section className="flex flex-col items-center justify-center bg-white p-8 rounded-lg shadow-lg">
-                <h1 className="text-4xl font-bold mb-6 text-amber-600">FocusApp</h1>
+                <h1 className="text-4xl font-bold mb-6 text-amber-600">Air Pollution Analyzer</h1>
                 <form className="flex flex-col w-80 space-y-4" onSubmit={onSubmit}>
                     <div className="flex flex-col">
                         <label htmlFor="name" className="font-bold text-xl text-gray-700">Name</label>
