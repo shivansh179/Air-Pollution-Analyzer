@@ -40,7 +40,7 @@ const Login = () => {
                         <h1 className="text-2xl text-white md:text-4xl lg:text-4xl font-bold mb-6">Air Pollution Analyzer</h1>
                         <form className="flex flex-col w-64 space-y-4" onSubmit={onLogin}>
                             <div className="flex flex-col">
-                                <label htmlFor="email-address" className="font-bold text-purple-300 text-xl">Email address</label>
+                                <label htmlFor="email-address" className="font-bold text-blue-300 text-xl">Email address</label>
                                 <input
                                     id="email-address"
                                     name="email"
@@ -48,11 +48,11 @@ const Login = () => {
                                     required
                                     placeholder="Email address"
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="mt-2 p-2 border border-gray-300 rounded"
+                                    className="mt-2 p-2 border border-gray-300 font-mono font-bold rounded"
                                 />
                             </div>
                             <div className="flex flex-col">
-                                <label htmlFor="password" className="font-bold text-purple-300 text-xl">Password</label>
+                                <label htmlFor="password" className="font-bold text-blue-300 text-xl">Password</label>
                                 <input
                                     id="password"
                                     name="password"
@@ -60,7 +60,7 @@ const Login = () => {
                                     required
                                     placeholder="Password"
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="mt-2 p-2 border border-gray-300 rounded"
+                                    className="mt-2 p-2 border border-gray-300 font-mono font-bold rounded"
                                 />
                             </div>
                             <button
