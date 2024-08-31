@@ -6,9 +6,7 @@ import { getAuth, signOut } from "firebase/auth";
 import app from "../firebase";
 import { useNavigate } from 'react-router-dom';
 
-const Aqi = ( ) => {
-
- 
+const Aqi = () => {
   const auth = getAuth(app);
   const navigate = useNavigate();
 
@@ -89,17 +87,17 @@ const Aqi = ( ) => {
   const getColorForAirValue = (airvalue) => {
     switch (airvalue) {
       case 'Good':
-        return 'text-green-500';
+        return 'text-green-400';
       case 'Fair':
-        return 'text-yellow-500';
+        return 'text-yellow-300';
       case 'Moderate':
-        return 'text-orange-500';
+        return 'text-orange-400';
       case 'Poor':
         return 'text-red-500';
       case 'Very Poor':
         return 'text-red-700';
       default:
-        return 'text-black';
+        return 'text-white';
     }
   };
 
@@ -140,68 +138,74 @@ const Aqi = ( ) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-500 to-blue-800 p-4">
-       
+    <div
+      className="flex flex-col items-center justify-center min-h-screen p-4 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url('/air.jpg')` }} // Use your background image URL
+    >
       <ToastContainer />
-      <h1 className="text-4xl font-bold mb-6 text-white">Air Pollution Analyzer</h1>
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-semibold mb-4">Your Location:</h2>
+      <h1 className="text-4xl font-bold mb-6 font-serif text-white">Air Pollution Analyzer</h1>
+
+      <div className="backdrop-blur-lg bg-opacity-80 p-6 rounded-lg shadow-2xl border border-gray-200 w-full max-w-md">
+        <h2 className="text-2xl font-semibold mb-4 text-white ">Your Location:</h2>
         <div className="flex flex-col mb-4">
-          <label htmlFor="latitude" className="text-lg font-medium">Latitude</label>
+          <label htmlFor="latitude" className="text-lg font-medium text-white">Latitude</label>
           <input
             type="number"
             name="lat"
             placeholder="Latitude"
             id="latitude"
-            className="mt-2 p-2 border border-gray-300 rounded"
+            className="mt-2 p-2 border border-gray-300 font-serif rounded"
             value={lat}
             onChange={(e) => setLat(e.target.value)}
           />
         </div>
         <div className="flex flex-col mb-4">
-          <label htmlFor="longitude" className="text-lg font-medium">Longitude</label>
+          <label htmlFor="longitude" className="text-lg font-medium text-white">Longitude</label>
           <input
             type="number"
             name="lon"
             placeholder="Longitude"
             id="longitude"
-            className="mt-2 p-2 border border-gray-300 rounded"
+            className="mt-2 p-2 border border-gray-300 font-serif rounded"
             value={lon}
             onChange={(e) => setLon(e.target.value)}
           />
         </div>
         <button
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition mb-4"
+          className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-shadow shadow-lg hover:shadow-xl mb-4"
           onClick={handleSearch}
         >
           Search
         </button>
       </div>
+
       {aqi && (
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md mt-6">
-          <h2 className="text-2xl font-semibold mb-4">Air Quality Index:</h2>
+        <div className="backdrop-blur-sm bg-opacity-80 p-6 rounded-lg shadow-2xl border border-gray-200 w-full max-w-md mt-6">
+          <h2 className="text-2xl font-semibold mb-4 text-white">Air Quality Index:</h2>
           <div className="flex items-center">
-            <span className="text-4xl font-bold">{aqi}</span>
-            <span className="text-4xl mx-2">&rarr;</span>
+            <span className="text-4xl font-bold text-white">{aqi}</span>
+            <span className="text-4xl mx-2 text-white">&rarr;</span>
             <span className={`text-4xl font-bold ${getColorForAirValue(airvalue)}`}>{airvalue}</span>
           </div>
           <div className="mt-4">
-            <h2 className="text-2xl font-semibold mb-4">Concentration of pollutants in air:</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-white">Concentration of pollutants in air:</h2>
             {Object.entries(pollutants).map(([key, value]) => (
               <div key={key} className="flex justify-between mb-2">
-                <h3 className="text-lg font-medium">{getPollutantFullName(key)}:</h3>
-                <span className="text-lg">{value} µg/m³</span>
+                <h3 className="text-lg font-medium text-white">{getPollutantFullName(key)}:</h3>
+                <span className="text-lg text-white">{value} µg/m³</span>
               </div>
             ))}
           </div>
         </div>
       )}
+
       <footer className="flex items-center mt-6">
         <span className="text-white text-lg">Plant more</span>
         <img src={logo} alt="logo" className="ml-2 w-9 h-9" />
       </footer>
+      
       <button
-        className="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+        className="mt-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-shadow shadow-lg hover:shadow-xl"
         onClick={handleLogout}
       >
         Logout
