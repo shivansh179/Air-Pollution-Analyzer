@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import app from '../firebase';
 
 const Signup = () => {
@@ -19,7 +21,6 @@ const Signup = () => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log(user);
 
             // Store user phone number in Firestore
             await setDoc(doc(db, 'users', user.uid), {
@@ -29,11 +30,17 @@ const Signup = () => {
                 uid: user.uid
             });
 
-            navigate("/login");
+            toast.success('Signup successful!');
+            
+            setTimeout(() => {
+                
+                navigate('/login');
+            }, 3000);
         } catch (error) {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            console.error(errorCode, errorMessage);
+            toast.error('Signup failed: ' + errorMessage);
         }
     };
 
@@ -42,6 +49,7 @@ const Signup = () => {
             className="flex flex-col items-center p-10 justify-center w-screen md:h-screen bg-cover bg-center bg-no-repeat"
             style={{ backgroundImage: `url('/air.jpg')` }} // Replace with your image URL
         >
+            <ToastContainer />
             <section className="flex flex-col items-center justify-center bg-cover backdrop-blur-lg bg-opacity-90 p-6 rounded-lg shadow-lg">
                 <h1 className="text-2xl text-white md:text-4xl lg:text-4xl font-bold mb-6">Air Pollution Analyzer - Sign Up</h1>
                 <form className="flex flex-col w-64 space-y-4" onSubmit={onSubmit}>
@@ -97,7 +105,7 @@ const Signup = () => {
                             placeholder="Phone Number"
                             value={number}
                             onChange={(e) => setNumber(e.target.value)}
-                            className="mt-2 p-2 border border-gray-300 font-mono font-bold  rounded"
+                            className="mt-2 p-2 border border-gray-300 font-mono font-bold rounded"
                         />
                     </div>
 
